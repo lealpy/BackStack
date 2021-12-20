@@ -20,8 +20,13 @@ class RedFragment : Fragment(R.layout.fragment_red) {
 
         binding = FragmentRedBinding.bind(view)
 
-        binding.redCounter.setOnClickListener { addFragment() }
+        initViews()
         parentFragmentManager.addOnBackStackChangedListener(backStackListener)
+    }
+
+    private fun initViews() {
+        binding.redCounter.setOnClickListener { addFragment() }
+        binding.redCounter.text = parentFragmentManager.backStackEntryCount.toString()
     }
 
     private fun addFragment() {

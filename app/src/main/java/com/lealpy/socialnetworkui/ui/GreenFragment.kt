@@ -20,8 +20,13 @@ class GreenFragment : Fragment(R.layout.fragment_green) {
 
         binding = FragmentGreenBinding.bind(view)
 
-        binding.greenCounter.setOnClickListener { addFragment() }
+        initViews()
         parentFragmentManager.addOnBackStackChangedListener(backStackListener)
+    }
+
+    private fun initViews() {
+        binding.greenCounter.setOnClickListener { addFragment() }
+        binding.greenCounter.text = parentFragmentManager.backStackEntryCount.toString()
     }
 
     private fun addFragment() {
