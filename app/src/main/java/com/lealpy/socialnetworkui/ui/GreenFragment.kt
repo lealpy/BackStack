@@ -27,7 +27,7 @@ class GreenFragment : Fragment(R.layout.fragment_green) {
     }
 
     companion object {
-        const val GREEN_BACK_STACK = "GREEN_BACK_STACK"
+        const val GREEN_FRAGMENT_KEY = "GREEN_BACK_STACK"
     }
 
 }

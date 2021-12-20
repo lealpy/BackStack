@@ -2,35 +2,32 @@ package com.lealpy.socialnetworkui.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.lealpy.socialnetworkui.R
 import com.lealpy.socialnetworkui.databinding.FragmentBlueBinding
 
 class BlueFragment : Fragment(R.layout.fragment_blue) {
 
     private lateinit var binding : FragmentBlueBinding
-    private var number = BLUE_FRAGMENT_NUMBER_START_VALUE
+
+    private val backStackListener = FragmentManager.OnBackStackChangedListener {
+        binding.blueCounter.text = parentFragmentManager.backStackEntryCount.toString()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentBlueBinding.bind(view)
 
-        if(savedInstanceState == null) {
-            arguments?.getInt(BLUE_FRAGMENT_ARGUMENTS_NUMBER_KEY)?.let { number ->
-                this.number = number
-            }
-        }
-        else {
-            number = savedInstanceState.getInt(BLUE_FRAGMENT_NUMBER_KEY, BLUE_FRAGMENT_NUMBER_START_VALUE)
-        }
-
         initViews()
+        parentFragmentManager.addOnBackStackChangedListener(backStackListener)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(BLUE_FRAGMENT_NUMBER_KEY, number)
+    override fun onDestroy() {
+        super.onDestroy()
+        parentFragmentManager.removeOnBackStackChangedListener(backStackListener)
     }
 
     private fun initViews() {
@@ -38,34 +35,21 @@ class BlueFragment : Fragment(R.layout.fragment_blue) {
             addFragment()
         }
 
-        binding.blueCounter.text = number.toString()
+        //Обновление при первом вызове (избавиться?)
+        binding.blueCounter.text = parentFragmentManager.backStackEntryCount.toString()
 
     }
 
     private fun addFragment() {
         parentFragmentManager
             .beginTransaction()
-            .replace(R.id.blueLayout, newInstance(number.inc()))
-            .addToBackStack(BLUE_FRAGMENT_BACK_STACK)
+            .add(R.id.fragmentContainer, BlueFragment::class.java, bundleOf())
+            .setReorderingAllowed(true)
+            .addToBackStack(BLUE_FRAGMENT_KEY)
             .commit()
     }
 
     companion object {
-        const val BLUE_FRAGMENT_BACK_STACK = "BLUE_BACK_STACK"
-        private const val BLUE_FRAGMENT_ARGUMENTS_NUMBER_KEY = "BLUE_FRAGMENT_ARGUMENTS_NUMBER_KEY"
-        private const val BLUE_FRAGMENT_NUMBER_KEY = "BLUE_FRAGMENT_NUMBER_KEY"
-        const val BLUE_FRAGMENT_NUMBER_START_VALUE = 0
-
-        @JvmStatic
-        fun newInstance(number: Int): BlueFragment {
-            return BlueFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(BLUE_FRAGMENT_ARGUMENTS_NUMBER_KEY, number)
-                }
-            }
-        }
+        const val BLUE_FRAGMENT_KEY = "BLUE_BACK_STACK"
     }
-
-
-
 }
