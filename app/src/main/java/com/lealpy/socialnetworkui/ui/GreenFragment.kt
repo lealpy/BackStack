@@ -1,33 +1,44 @@
 package com.lealpy.socialnetworkui.ui
 
-import android.util.Log
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.lealpy.socialnetworkui.R
+import com.lealpy.socialnetworkui.databinding.FragmentGreenBinding
 
 class GreenFragment : Fragment(R.layout.fragment_green) {
 
-    override fun onPause() {
-        super.onPause()
-        Log.d("MyLog", "onPause")
+    private lateinit var binding : FragmentGreenBinding
+
+    private val backStackListener = FragmentManager.OnBackStackChangedListener {
+        binding.greenCounter.text = parentFragmentManager.backStackEntryCount.toString()
     }
 
-    override fun onStop() {
-        super.onStop()
-        Log.d("MyLog", "onStop")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentGreenBinding.bind(view)
+
+        binding.greenCounter.setOnClickListener { addFragment() }
+        parentFragmentManager.addOnBackStackChangedListener(backStackListener)
+    }
+
+    private fun addFragment() {
+        parentFragmentManager
+            .beginTransaction()
+            .add(R.id.fragmentContainer, GreenFragment())
+            .setReorderingAllowed(true)
+            .addToBackStack(GREEN_FRAGMENT_KEY)
+            .commit()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("MyLog", "onDestroy")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d("MyLog", "onDetach")
+        parentFragmentManager.removeOnBackStackChangedListener(backStackListener)
     }
 
     companion object {
-        const val GREEN_FRAGMENT_KEY = "GREEN_BACK_STACK"
+        const val GREEN_FRAGMENT_KEY = "GREEN_FRAGMENT_KEY"
     }
-
 }

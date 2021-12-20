@@ -2,7 +2,6 @@ package com.lealpy.socialnetworkui.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.lealpy.socialnetworkui.R
@@ -21,8 +20,17 @@ class BlueFragment : Fragment(R.layout.fragment_blue) {
 
         binding = FragmentBlueBinding.bind(view)
 
-        initViews()
+        binding.blueCounter.setOnClickListener { addFragment() }
         parentFragmentManager.addOnBackStackChangedListener(backStackListener)
+    }
+
+    private fun addFragment() {
+        parentFragmentManager
+            .beginTransaction()
+            .add(R.id.fragmentContainer, BlueFragment())
+            .setReorderingAllowed(true)
+            .addToBackStack(BLUE_FRAGMENT_KEY)
+            .commit()
     }
 
     override fun onDestroy() {
@@ -30,26 +38,7 @@ class BlueFragment : Fragment(R.layout.fragment_blue) {
         parentFragmentManager.removeOnBackStackChangedListener(backStackListener)
     }
 
-    private fun initViews() {
-        binding.blueCounter.setOnClickListener {
-            addFragment()
-        }
-
-        //Обновление при первом вызове (избавиться?)
-        binding.blueCounter.text = parentFragmentManager.backStackEntryCount.toString()
-
-    }
-
-    private fun addFragment() {
-        parentFragmentManager
-            .beginTransaction()
-            .add(R.id.fragmentContainer, BlueFragment::class.java, bundleOf())
-            .setReorderingAllowed(true)
-            .addToBackStack(BLUE_FRAGMENT_KEY)
-            .commit()
-    }
-
     companion object {
-        const val BLUE_FRAGMENT_KEY = "BLUE_BACK_STACK"
+        const val BLUE_FRAGMENT_KEY = "BLUE_FRAGMENT_KEY"
     }
 }

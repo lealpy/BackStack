@@ -9,7 +9,7 @@
     </style>
 
     <style name="Toolbar">
-        <item name="android:background">@color/purple_500</item>
+        <item name="android:background">@color/toolbar</item>
         <item name="titleTextColor">@color/white</item>
     </style>
 

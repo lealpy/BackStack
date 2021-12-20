@@ -22,11 +22,11 @@
         android:id="@+id/redCounter"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:text="@string/fragment_counter_start_value"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="@string/fragment_counter_start_value"
         style="@style/TextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
